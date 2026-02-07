@@ -14,7 +14,7 @@ import yaml
 import numpy as np
 import matplotlib.pyplot as plt
 
-from data.io import load_depth, load_rgb, load_anchors, anchors_to_pixel_indices
+from data.io import load_depth, load_rgb, anchors_to_pixel_indices
 from geometry.sphere import get_4_neighbors
 from graph.weights import compute_anisotropic_weights
 from graph.laplacian import build_weighted_laplacian, build_gradient_laplacian

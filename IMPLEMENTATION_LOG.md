@@ -45,7 +45,7 @@ ElasticPanoramaDepthRefine/
 │   ├── masks.py                 # Sky/edge mask 检测
 │   ├── visualization.py         # 可视化工具
 │   ├── pointcloud.py            # 点云生成（深度图 → PLY）
-│   └── generate_anchors.py      # Anchor 生成工具
+│   └── generate_anchors_from_ply.py  # Anchor 生成工具（从 fused.ply）
 ├── test_step1_data_io.py        # Step 1 测试脚本
 └── IMPLEMENTATION_LOG.md        # 本文档
 ```
@@ -245,7 +245,7 @@ visualize_anchors(anchor_indices, anchor_depths, width, height, "anchors.png", r
 - `depth_to_pointcloud_ply(depth, rgb, output_path, convention)`: 将深度图转换为 binary PLY 点云
 
 **特点**：
-- 使用 colmap_util 约定（与 fused_remap.py 一致）
+- 使用 colmap_util 约定（与 COLMAP 工具链约定一致）
 - 支持 RGB 颜色信息
 - 输出 binary PLY 格式（小端序）
 
@@ -506,7 +506,7 @@ python test_step1_data_io.py
 - ✅ 修复 CG 求解器参数错误
   - 将 `tol` 改为 `rtol` 和 `atol`
 - ✅ 修复坐标转换错误
-  - 参考 `fused_remap.py` 和 `spherical_camera.py` 修正坐标转换
+  - 修正坐标转换，使用 `colmap_util` 约定
   - `colmap_util` 约定：theta = yaw = atan2(x,z) [-π, π], phi = pitch = -atan2(y, sqrt(x²+z²)) [-π/2, π/2]
   - 修复 `theta_phi_to_pixel` 和 `pixel_to_theta_phi` 函数
   - 确保与参考深度图投影方式一致
@@ -518,7 +518,7 @@ python test_step1_data_io.py
   - Anchor 坐标转换正确：u 范围 [61, 1835]，v 范围 [124, 624]
 - ✅ 添加点云生成功能
   - 实现 `utils/pointcloud.py`：从深度图生成 binary PLY 点云
-  - 使用 colmap_util 约定，与 fused_remap.py 一致
+  - 使用 colmap_util 约定，与 COLMAP 工具链约定一致
   - 支持 RGB 颜色信息
 - ✅ 重构输出目录结构
   - `elastic_refined/`：只保留最终 PLY 点云文件（pointcloud.ply）

@@ -1,0 +1,8 @@
+numpy>=1.20.0
+scipy>=1.7.0
+matplotlib>=3.3.0
+opencv-python>=4.5.0
+imageio>=2.9.0
+pyyaml>=5.4.0
+pycolmap>=0.4.0
+plyfile>=0.7.0

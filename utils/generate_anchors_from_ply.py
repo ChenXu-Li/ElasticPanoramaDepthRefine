@@ -13,7 +13,6 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from data.io import pixel_to_theta_phi
-from geometry.sphere import get_4_neighbors
 
 
 def load_ply_xyz(ply_path: Path) -> np.ndarray:

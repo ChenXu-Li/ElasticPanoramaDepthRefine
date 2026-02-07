@@ -34,9 +34,11 @@ Anchor 点**不是直接从 fused.ply 读取的**，而是经过以下流程：
 
 ## 关键代码位置
 
-### 1. 参考深度图生成（PanoramaDepthRefine）
+### 1. 参考深度图生成
 
-**文件**: `PanoramaDepthRefine/src/projection/project_points.py`
+**说明**: 本项目已独立实现参考深度图生成功能（`utils/generate_anchors_from_ply.py`），不依赖其他项目。
+
+**参考实现**: 类似功能在其他项目中也有实现（如 `PanoramaDepthRefine/src/projection/project_points.py`），但本项目已完全独立实现。
 
 ```python
 def project_colmap_points_to_pano(
@@ -76,7 +78,7 @@ def project_colmap_points_to_pano(
 
 ### 2. Anchor 点生成（ElasticPanoramaDepthRefine）
 
-**文件**: `ElasticPanoramaDepthRefine/utils/generate_anchors.py`
+**文件**: `ElasticPanoramaDepthRefine/utils/generate_anchors_from_ply.py`
 
 ```python
 def generate_anchors_from_ref_depth(
@@ -108,11 +110,11 @@ points_camera = world_to_cam(points_world, cam_from_world)  # (N, 3)
 depths = np.linalg.norm(points_camera, axis=1)  # sqrt(x² + y² + z²)
 ```
 
-这与 `fused_remap.py` 和 `spherical_camera.py` 的定义一致。
+这与 COLMAP 工具链的坐标约定一致。
 
 ## 过滤层级
 
-### 第一层：参考深度图生成时（PanoramaDepthRefine）
+### 第一层：参考深度图生成时
 - `depth_min`: 0.1 米（默认）
 - `depth_max`: 1000.0 米（默认）
 - 过滤位置：`cam_points_to_equirectangular()` 函数中

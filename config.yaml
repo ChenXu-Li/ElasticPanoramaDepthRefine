@@ -26,7 +26,7 @@ paths:
 # Anchor 过滤配置
 anchor_filter:
   # 最大深度阈值（米），距离球心（相机原点）大于等于此值的参考点将被剔除，不做anchor
-  # 注意：深度值定义为"到相机原点的欧式距离"（radial distance），与 fused_remap.py 一致
+  # 注意：深度值定义为"到相机原点的欧式距离"（radial distance），与 COLMAP 工具链约定一致
   max_depth: 100.0
 
 # 优化参数

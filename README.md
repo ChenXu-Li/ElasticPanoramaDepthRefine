@@ -316,7 +316,7 @@ $$
 2. **PLY 点云** (`output_dir/point5_median.ply`)
    - 格式：Binary PLY（小端序）
    - 内容：3D 点云（包含 RGB 颜色信息）
-   - 约定：`colmap_util`（与 fused_remap.py 一致）
+   - 约定：`colmap_util`（与 COLMAP 工具链约定一致）
 
 3. **可视化图像**（`logs/` 目录）
    - `depth_comparison.png`：原始 vs 矫正深度对比
@@ -398,7 +398,7 @@ python test_step1_data_io.py
 ### 2. 坐标约定
 
 - 默认使用 `colmap_util` 约定
-- 确保与数据源一致（参考 `fused_remap.py` 和 `spherical_camera.py`）
+- 确保与数据源一致（使用 `colmap_util` 约定，与 COLMAP 工具链一致）
 
 ### 3. 内存使用
 

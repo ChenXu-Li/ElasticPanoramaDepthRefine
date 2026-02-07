@@ -107,7 +107,7 @@ def theta_phi_to_pixel(
     """
     将球面坐标 (θ, φ) 转换为像素坐标 (u, v)
     
-    根据 fused_remap.py 和 spherical_camera.py 的定义：
+    坐标约定：
     - colmap_util: theta = yaw = atan2(x, z) [-π, π], phi = pitch = -atan2(y, sqrt(x^2+z^2)) [-π/2, π/2]
     - dap: theta = 方位角 [0, 2π), phi = 极角 [0, π]
     
@@ -124,7 +124,6 @@ def theta_phi_to_pixel(
     """
     if convention == "colmap_util":
         # colmap_util 约定：theta = yaw [-π, π], phi = pitch [-π/2, π/2]
-        # 与 fused_remap.py 第186-189行一致
         yaw = theta  # 直接使用，已经是 [-π, π]
         pitch = phi  # 直接使用，已经是 [-π/2, π/2]
         u = (1.0 + yaw / np.pi) * 0.5  # [0, 1]
@@ -157,7 +156,7 @@ def pixel_to_theta_phi(
     """
     将像素坐标 (u, v) 转换为球面坐标 (θ, φ)
     
-    根据 fused_remap.py 和 spherical_camera.py 的定义：
+    坐标约定：
     - colmap_util: theta = yaw, phi = pitch
     - dap: theta = 方位角, phi = 极角
     
@@ -177,7 +176,6 @@ def pixel_to_theta_phi(
     v_norm = v / height
     
     if convention == "colmap_util":
-        # 与 fused_remap.py 第188-189行反向一致
         yaw = (u_norm * 2.0 - 1.0) * np.pi  # [-π, π]
         pitch = (1.0 - v_norm * 2.0) * np.pi / 2.0  # [-π/2, π/2]
         theta = yaw  # theta = yaw
