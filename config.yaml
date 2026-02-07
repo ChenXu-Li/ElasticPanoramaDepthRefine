@@ -1,0 +1,87 @@
+# ElasticPanoramaDepthRefine 配置文件
+
+# 数据路径配置（必须使用绝对路径）
+paths:
+  # DAP 深度图路径（.npy 文件）
+  depth_dap: /root/autodl-tmp/data/STAGE1_4x/BridgeB/depth_npy/point4_median.npy
+  # RGB 图像路径（可选，用于 edge / sky mask）
+  rgb: /root/autodl-tmp/data/STAGE1_4x/BridgeB/backgrounds/point4_median.png
+  # Anchor 点路径（.npy 文件，格式：[K, 3] -> (theta, phi, depth)）
+  # 如果路径以 logs/ 开头，将相对于项目根目录的 logs 目录
+  # 如果文件不存在，将自动从 fused.ply 生成（需要配置 anchor_generation 部分）
+  anchors: logs/anchor.npy
+  # 输出目录
+  output_dir: /root/autodl-tmp/data/STAGE1_4x/BridgeB/elastic_refined
+  # Anchor 自动生成配置（当 anchor 文件不存在时使用）
+  anchor_generation:
+    # fused.ply 文件路径（用于生成 anchor）
+    fused_ply: /root/autodl-tmp/data/colmap_STAGE1_4x/BridgeB/fused.ply
+    # COLMAP 重建目录
+    colmap_dir: /root/autodl-tmp/data/colmap_STAGE1_4x/BridgeB/sparse/0
+    # 相机名称子串（如 "pano_camera12"）
+    camera_name: pano_camera12
+    # 采样率 [0, 1]，1.0 表示使用所有有效像素（默认使用所有有效像素）
+    sample_rate: 1.0
+
+# Anchor 过滤配置
+anchor_filter:
+  # 最大深度阈值（米），距离球心（相机原点）大于等于此值的参考点将被剔除，不做anchor
+  # 注意：深度值定义为"到相机原点的欧式距离"（radial distance），与 fused_remap.py 一致
+  max_depth: 100.0
+
+# 优化参数
+optimization:
+  # 梯度权重参数 λ_g
+  lambda_g: 1.0
+  # 边缘权重参数 λ_e
+  lambda_e: 5.0
+  # 梯度保持项权重 λ_grad
+  lambda_grad: 0.1
+  # Anchor 项权重 α_k（每个 anchor 的权重）
+  alpha_anchor: 10.0
+
+# 图像尺寸（如果未从图像读取，将从深度图自动读取）
+image:
+  width: 1920
+  height: 960
+
+# 边缘检测配置
+edge:
+  # 是否启用 RGB 边缘检测（已禁用，只使用深度边缘）
+  use_rgb_edge: false
+  # RGB 边缘阈值（已禁用）
+  rgb_edge_threshold: 0.1
+  # 是否启用深度边缘检测
+  use_depth_edge: true
+  # 深度边缘阈值（log-depth 空间）
+  depth_edge_threshold: 0.5
+
+# Sky mask 配置
+sky:
+  # 是否启用 sky mask
+  enable: true
+  # Sky 检测阈值（RGB 亮度）
+  brightness_threshold: 0.9
+
+# 求解器配置
+solver:
+  # 求解方法：'cg' (共轭梯度) 或 'spsolve' (直接求解)
+  method: cg
+  # CG 最大迭代次数
+  max_iter: 500
+  # CG 收敛容差
+  tol: 1e-4
+
+# 深度缩放配置
+# DAP 深度图缩放因子：将 0-1 范围的深度值转换为米
+# DAP 预测深度在 0-1 范围，乘以此因子后转换为米单位
+depth_scale: 100.0
+
+# 输出配置
+output:
+  # 输出格式：'npy' 或 'png'
+  format: npy
+  # 是否保存可视化
+  save_visualization: true
+  # 是否可视化权重项（梯度项和边缘项）
+  visualize_weight_terms: false
