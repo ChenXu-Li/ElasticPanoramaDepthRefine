@@ -395,10 +395,17 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     logs_dir.mkdir(parents=True, exist_ok=True)
     
-    # 中间结果保存到 logs 目录
-    depth_output = logs_dir / "depth_refined.npy"
+    # 深度图保存到输出目录（与PLY同一目录）
+    depth_dap_path = Path(paths["depth_dap"])
+    depth_filename = depth_dap_path.stem + ".npy"  # 使用深度图文件名（不含扩展名）+ .npy
+    depth_output = output_dir / depth_filename
     save_depth(depth_refined, depth_output, format=output_config["format"])
-    print(f"  深度图已保存（中间结果）: {depth_output}")
+    print(f"  深度图已保存: {depth_output}")
+    
+    # 中间结果也保存到 logs 目录（用于调试）
+    depth_output_logs = logs_dir / "depth_refined.npy"
+    save_depth(depth_refined, depth_output_logs, format=output_config["format"])
+    print(f"  深度图已保存（中间结果）: {depth_output_logs}")
     
     # 保存可视化到 logs 目录
     if output_config["save_visualization"]:
